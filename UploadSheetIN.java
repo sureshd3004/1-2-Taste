@@ -1,4 +1,4 @@
-package scrab;
+package com12taste;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -11,14 +11,22 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import com.neverbounce.api.client.NeverbounceClient;
+import com.neverbounce.api.client.NeverbounceClientFactory;
+import com.neverbounce.api.internal.JsonUtils;
+import com.neverbounce.api.model.Result;
+import com.neverbounce.api.model.SingleCheckResponse;
 
-public class UploadSheetIN {
+public class UploadSheet {
 
 	public static void main(String[] args) {
 
-		//		try {
-		String rpath="C:\\Users\\sures\\OneDrive\\Desktop\\EU 18_12 A (1).xlsx";
+		String LeadOwner="monika.pavlovska@12taste.com";
+		String date="12/22/2023";
+		String rpath="C:\\Users\\sures\\OneDrive\\Desktop\\from.xlsx";
 		String wpath="C:\\Users\\sures\\OneDrive\\Desktop\\write.xlsx";
+
+
 		try 
 		(FileInputStream sourceFileInputStream = new FileInputStream(rpath);
 				FileInputStream destinationFileInputStream = new FileInputStream(wpath);
@@ -27,7 +35,7 @@ public class UploadSheetIN {
 			XSSFSheet sourceSheet = sourceWorkbook.getSheetAt(0);
 			XSSFSheet destinationSheet = destinationWorkbook.getSheetAt(0);
 			int lastRowNum = sourceSheet.getLastRowNum();
-			for (int i = 1; i <= lastRowNum; i++) {
+			for (int i =1; i <=lastRowNum; i++) {
 				String a7 = "";
 				String a77 = "";
 				String a8= "";
@@ -48,18 +56,19 @@ public class UploadSheetIN {
 					XSSFCell source5= sourceRow.getCell(14);  
 					XSSFCell source6= sourceRow.getCell(15);  
 					XSSFCell source7= sourceRow.getCell(16);  
-					XSSFCell source77= sourceRow.getCell(17);  
-					//   System.out.println(source7.getStringCellValue());
+					XSSFCell source77= sourceRow.getCell(17);  				
 					XSSFCell source8= sourceRow.getCell(18);  
 					XSSFCell source9= sourceRow.getCell(19);  
 					XSSFCell source10= sourceRow.getCell(20);  
 					XSSFCell source11= sourceRow.getCell(21);  
 					XSSFCell source12= sourceRow.getCell(41);  
 					XSSFCell source13= sourceRow.getCell(39); 
-					//	XSSFCell source14= sourceRow.getCell(19); 
 					XSSFCellStyle style=destinationWorkbook.createCellStyle(); 
 					style.setFillBackgroundColor(IndexedColors.RED.getIndex()); 
-			
+					style.setFillPattern(FillPatternType.DIAMONDS); 
+
+
+					// CELL
 					XSSFCell Name = destinationRow.createCell(0,CellType.STRING);
 					XSSFCell lName = destinationRow.createCell(1,CellType.STRING);
 					XSSFCell mail = destinationRow.createCell(2,CellType.STRING);     
@@ -72,7 +81,6 @@ public class UploadSheetIN {
 					XSSFCell mail4 = destinationRow.createCell(9,CellType.STRING);
 					XSSFCell mail5 = destinationRow.createCell(10,CellType.STRING);
 					XSSFCell mail6 = destinationRow.createCell(11,CellType.STRING);
-					//mail6.setCellStyle();
 					XSSFCell mail7 = destinationRow.createCell(12,CellType.STRING);
 					XSSFCell mail8 = destinationRow.createCell(13,CellType.STRING);
 					XSSFCell mail9 = destinationRow.createCell(14,CellType.STRING);
@@ -82,6 +90,9 @@ public class UploadSheetIN {
 					XSSFCell mail13 = destinationRow.createCell(18,CellType.STRING);
 					XSSFCell mail14 = destinationRow.createCell(19,CellType.STRING);
 					XSSFCell mail15 = destinationRow.createCell(20,CellType.STRING);
+					XSSFCell mail16 = destinationRow.createCell(21,CellType.STRING);
+					XSSFCell mail17 = destinationRow.createCell(22,CellType.STRING);
+					mail17.setCellValue(date);
 
 					// Copy the cell value to the destination cell
 					String val1 = sourceCell.getStringCellValue();
@@ -89,6 +100,26 @@ public class UploadSheetIN {
 					String val3 = email.getStringCellValue();
 					String val4 = source0.getStringCellValue();
 					String val5 = source.getStringCellValue();
+
+		/*			try {
+						String token = "private_cf04714a34d3d5872d8d0c912385d4b7";
+						NeverbounceClient neverbounceClient = NeverbounceClientFactory.create(token);
+						SingleCheckResponse singleCheckResponse = neverbounceClient
+								.prepareSingleCheckRequest()
+								.withEmail(val3) // address to verify
+								.withAddressInfo(true)  // return address info with response
+								.withCreditsInfo(true)  // return account credits info with response
+								.withTimeout(20)  // only wait on slow email servers for 20 seconds max
+								.build()
+								.execute();
+						Result result = singleCheckResponse.getResult();
+						JsonUtils.printJson(result);
+						String hi = result.toString().replace("\"", "");
+						lsorce.setCellValue(hi);
+					} catch (Exception e) {
+						System.out.println("Email Validation");
+					}
+					*/
 					try {										
 						String val6 = source1.getStringCellValue();
 						mail0.setCellValue(val6);
@@ -110,40 +141,29 @@ public class UploadSheetIN {
 
 					try {
 						a7 = source7.getStringCellValue();
-					} catch (Exception e) {
-						// TODO: handle exception
+					} catch (Exception e) {					
 					}
 					try {
 						a77 = source77.getStringCellValue();
 						mail7.setCellValue(a77);
 					} catch (Exception e) {
-						// TODO: handle exception
 					}
 					try {
 						a8 = source8.getStringCellValue();
 						mail8.setCellValue(a8);
 					} catch (Exception e) {
-						// TODO: handle exception
 					}try {
 						a9 = source9.getStringCellValue();
 						mail9.setCellValue(a9);
 					} catch (Exception e) {
-						// TODO: handle exception
 					}
-
 					if (a7.isEmpty()) {
-						//		 mail6.setCellValue(source7.getStringCellValue());// This line is not necessary but included for clarity
-
 						if (a7.isEmpty() && !a77.isEmpty()) {
 							mail6.setCellValue(a77);
 						}
-
-						// Copy values from Column 3 to Column 1 if Column 1 is empty and Column 2 is empty
 						if (a7.isEmpty() && a77.isEmpty() && !a8.isEmpty()) {
 							mail6.setCellValue(a8);
 						}
-
-						// Copy values from Column 4 to Column 1 if Column 1 is empty, Column 2 is empty, and Column 3 is empty
 						if (a7.isEmpty() && a77.isEmpty() && a8.isEmpty() && !a9.isEmpty()) {
 							mail6.setCellValue(a9);
 						}
@@ -152,20 +172,20 @@ public class UploadSheetIN {
 					String val16= source11.getRawValue();
 					String val17= source12.getRawValue();
 					String val18= source13.getStringCellValue();
-					//		String val19 =source14.getStringCellValue();
+
 					Name.setCellValue(val1);
 					lName.setCellValue(val2);
 					mail.setCellValue(val3);
 					mailq.setCellValue(val4);
-					lsorce.setCellValue(val5);						
+					mail16.setCellValue(val5);						
 					mail1.setCellValue(val7);
 					mail2.setCellValue(val8);
 					mail3.setCellValue(val9);
 					mail15.setCellValue(val15);
 					mail10.setCellValue(val16);
 					mail11.setCellValue(val17);
-					mail12.setCellValue(val18);
-					mail13.setCellValue("iliyas.r@12taste.com");					
+					mail12.setCellValue(val18);				
+					mail13.setCellValue(LeadOwner);					
 
 					double num = source11.getNumericCellValue();
 					if (num >=1 && num <=50 ) {	
@@ -187,14 +207,12 @@ public class UploadSheetIN {
 						if (a7.contains("DNC")) {
 							mail6.setCellValue("No Contact Is Found");
 							mail6.setCellStyle(style);
-						}
-					}
+						}			}
 				}      
 				try (FileOutputStream fileOutputStream = new FileOutputStream(wpath)) {
-					destinationWorkbook.write(fileOutputStream);
-				}}
+					destinationWorkbook.write(fileOutputStream);	
+				}
+			}destinationWorkbook.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-	}//finally {}
-}
+		}}}
