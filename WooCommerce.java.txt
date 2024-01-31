@@ -1,0 +1,535 @@
+package year2022;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.time.Duration;
+
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class E2E_IN_Variable_v2 {
+
+	static String MailID = "suresh.d@12taste.com";
+	static String Password ="suresh@2508";
+	static String filepath="C:\\Users\\sures\\OneDrive\\Desktop\\EU.xlsx";
+	static String sheetname="IN";
+	public static WebDriver driver;
+	public static Select dropdown;
+
+	public static void main(String[] args) throws IOException, InterruptedException {
+
+		driver = new EdgeDriver();
+		driver.get("https://www.12taste.com/in/my-account/");
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+		driver.findElement(By.id("username")).sendKeys("suresh.d@12taste.com");
+		driver.findElement(By.id("password")).sendKeys("suresh@2508");
+		driver.findElement(By.xpath("//*[@id=\"customer_login\"]/div[1]/form/p[3]/button")).click();
+		WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(19));
+
+		for (int i=1; i <=400; i++){
+			driver.get("https://www.12taste.com/in/wp-admin/post-new.php?post_type=product");
+			XSSFWorkbook rbook = new XSSFWorkbook(filepath);
+			XSSFSheet sheet = rbook.getSheetAt(0);
+			XSSFRow li = sheet.getRow(i);
+
+			XSSFCell cell1 = li.getCell(1);          XSSFCell cell0 = li.getCell(0);
+			XSSFCell cell2 = li.getCell(2);          XSSFCell cell3 = li.getCell(3);
+			XSSFCell cell4 = li.getCell(4);          XSSFCell cell5 = li.getCell(5);			
+			XSSFCell cell6 = li.getCell(6);		     XSSFCell cell7 = li.getCell(7);    	XSSFCell cell8 = li.getCell(8);
+			XSSFCell cell9 = li.getCell(9);		     XSSFCell cell10= li.getCell(10);       XSSFCell cell11= li.getCell(11);
+			XSSFCell cell12= li.getCell(12);         XSSFCell cell13= li.getCell(13);		XSSFCell cell14= li.getCell(14);			
+			XSSFCell cell15= li.getCell(15);         XSSFCell cell16 = li.getCell(16);      XSSFCell cell17 = li.getCell(17); 
+			XSSFCell cell18 = li.getCell(18);        XSSFCell cell19 = li.getCell(19);      XSSFCell cell20 = li.getCell(20);
+			XSSFCell cell21 = li.getCell(21);        XSSFCell cell22 = li.getCell(22);		XSSFCell cell23 = li.getCell(23);
+			XSSFCell cell24 = li.getCell(24);        XSSFCell cell25 = li.getCell(25);      XSSFCell cell26 = li.getCell(26);
+
+			String Name                 = cell0.getStringCellValue();  
+			String longdiscription      = cell1.getStringCellValue();   
+			String shortdiscription     = cell2.getStringCellValue();    			
+			String applicationarea      = cell3.getStringCellValue();    			
+			String HSNCode   = cell4.getRawValue();                                 
+			String CountryofOrigin      = cell5.getStringCellValue();       	 		
+			String LabelsandMarks       = cell6.getStringCellValue();      
+			String FlavourType   = cell7.getStringCellValue();
+			String FlavourProfile = cell8.getStringCellValue();
+			String ShelfLife = cell9.getStringCellValue();
+			String StorageConditions = cell10.getStringCellValue();
+			String Technology = cell11.getStringCellValue();
+			String DGClassification = cell12.getStringCellValue();
+			String DietarySuitability = cell13.getStringCellValue();
+			String Appearance = cell14.getStringCellValue();
+			String shipment = cell15.getStringCellValue();
+			String tax = cell16.getRawValue();       
+			String vendor = cell17.getStringCellValue();
+			String weight = cell18.getStringCellValue();                           
+			//	String minimumQuantity = cell21.getRawValue();
+			//	String cat =  cell20.getStringCellValue();	        
+			//	String PDS_URL = cell19.getStringCellValue();
+			//	String maximumQuantity = cell22.getRawValue();                  
+			String Commission=cell23.getStringCellValue();
+			String ReggularPrice=cell24.getStringCellValue();   
+			String SalePrice=cell25.getStringCellValue();
+			String Packaging = cell26.getStringCellValue();     
+			rbook.close();	
+
+
+			Thread.sleep(2000);
+			driver.findElement(By.xpath("//span[text()='Inventory']")).click();
+			WebElement sku = driver.findElement(By.xpath("//*[@id=\"_sku\"]"));
+			String id = sku.getAttribute("value");			
+			driver.get("https://www.12taste.com/in/wp-admin/post.php?post="+id+"&action=edit");
+			driver.findElement(By.xpath("//*[@id='title']")).sendKeys(Name);
+			WebElement elem = driver.findElement(By.xpath("//*[@id='product-type']"));
+			Select sel = new Select(elem);
+			sel.selectByVisibleText("Variable product");
+			try {	
+				driver.findElement(By.xpath("//span[text()='General']")).click();
+				Thread.sleep(1500);
+				WebElement dropdownelement = driver.findElement(By.xpath("//*[@id='_tax_class']"));
+				WebElement dropdowne = driver.findElement(By.xpath("//*[@id='_tax_status']"));
+				dropdown = new Select(dropdownelement);
+				Select dde = new Select(dropdowne);
+				dropdown.selectByVisibleText(tax+"%");
+				dde.selectByVisibleText("Taxable");
+				driver.findElement(By.xpath("//*[@id='wcpv_customize_product_vendor_settings']")).click();
+				driver.findElement(By.xpath("//*[@id='wcpv-keep-tax']")).click();
+			} catch (Exception e) {
+				System.out.println("Tax");
+				e.printStackTrace();
+			}
+			try { 	
+				WebElement att = driver.findElement(By.xpath("//span[text()='Attributes']"));
+				att.click();	
+				Thread.sleep(4000);
+				wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='select2-selection__placeholder']"))).click();
+				WebElement sd = driver.findElement(By.xpath("/html/body/span/span/span[1]/input"));
+				sd.sendKeys("packa");
+				sd.click();
+				driver.findElement(By.xpath("//li[text()='Packaging']")).click();
+				WebElement a = driver.findElement(By.cssSelector("#product_attributes > div.product_attributes.wc-metaboxes.ui-sortable > div.woocommerce_attribute.wc-metabox.postbox.taxonomy.pa_packaging.open > div > table > tbody > tr:nth-child(1) > td:nth-child(2) > span > span.selection > span > ul > li > input"));     
+				String[] wordsArr = Packaging.split(",");
+				for (String String_word : wordsArr){
+					Thread.sleep(2000);
+					wait.until(ExpectedConditions.elementToBeClickable(a)).click();
+					a.sendKeys(String_word);
+					driver.findElement(By.xpath("//li[@class='select2-results__option select2-results__option--highlighted']")).click();				    
+				}		
+				driver.findElement(By.xpath("//*[@id='product_attributes']/div[2]/div[1]/h3/div[1]")).click();
+				Thread.sleep(2000);
+				driver.findElement(By.xpath("//*[@id='product_attributes']/div[3]/button")).click();
+				Thread.sleep(2000);
+			} catch (Exception e) {
+				System.out.println("Packaging");
+				e.printStackTrace();
+			}
+			try{
+				driver.findElement(By.xpath("//span[text()='Shipping']")).click();
+				WebElement dropdownelement = driver.findElement(By.xpath("//*[@id='product_shipping_class']"));
+				dropdown = new Select(dropdownelement);
+				dropdown.selectByVisibleText(shipment);
+			} catch (Exception e) {
+				System.err.println("shipping");
+				e.printStackTrace();
+			}	
+			WebElement att = driver.findElement(By.xpath("//span[text()='Attributes']"));
+			att.click();
+			WebElement close = driver.findElement(By.xpath("//*[@id=\"product_attributes\"]/div[1]/span/a[2]"));
+			try {	
+				int application=2;
+				Thread.sleep(3000);
+				wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='select2-selection__placeholder']")));
+				WebElement s = driver.findElement(By.xpath("//span[@class='select2-selection__placeholder']"));		
+				s.click();
+				WebElement sd = driver.findElement(By.xpath("/html/body/span/span/span[1]/input"));
+				sd.sendKeys("application");
+				sd.click();
+				driver.findElement(By.xpath("//li[text()='Application Area']")).click();
+				WebElement a = driver.findElement(By.cssSelector("#product_attributes > div.product_attributes.wc-metaboxes.ui-sortable > div.woocommerce_attribute.wc-metabox.postbox.taxonomy.pa_application-area.open > div > table > tbody > tr:nth-child(1) > td:nth-child(2) > span > span.selection > span > ul > li > input"));     
+				String[] wordsArra = applicationarea.split(",");
+				for (String String_word : wordsArra){
+					a.sendKeys(String_word);
+					Thread.sleep(2345);
+					driver.findElement(By.xpath("//li[@class='select2-results__option select2-results__option--highlighted']")).click();
+				}
+				Thread.sleep(3456);
+				driver.findElement(By.xpath("//*[@id=\"product_attributes\"]/div[2]/div["+application+"]/div/table/tbody/tr[3]/td/div/label/input")).click();			
+				close.click();						
+			} catch (Exception e) {
+				System.out.println("Application");
+				e.printStackTrace();
+			}
+			try {
+				int DG = 3;
+				if (DGClassification.equalsIgnoreCase("null")) {}				   
+				else {
+
+					wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='select2-selection__placeholder']")));
+					WebElement s = driver.findElement(By.xpath("//span[@class='select2-selection__placeholder']"));
+					s.click();
+					WebElement sd = driver.findElement(By.xpath("/html/body/span/span/span[1]/input"));
+					sd.sendKeys("DG");
+					sd.click();
+					driver.findElement(By.xpath("//li[text()='DG Classification']")).click();
+					WebElement a = driver.findElement(By.cssSelector("#product_attributes > div.product_attributes.wc-metaboxes.ui-sortable > div.woocommerce_attribute.wc-metabox.postbox.taxonomy.pa_dg-classification.open > div > table > tbody > tr:nth-child(1) > td:nth-child(2) > span > span.selection > span > ul > li > input"));     
+					a.sendKeys(DGClassification);				
+					driver.findElement(By.xpath("//*[@class=\"select2-results__option select2-results__option--highlighted\"]")).click();
+					Thread.sleep(3456);
+					driver.findElement(By.xpath("//*[@id=\"product_attributes\"]/div[2]/div["+DG+"]/div/table/tbody/tr[3]/td/div/label/input")).click();
+					close.click();
+				}} catch (Exception e) {
+					System.out.println("DG");
+					e.printStackTrace();
+				}
+			try {
+				int Dietarysuitability = 4;
+				if (DietarySuitability.equalsIgnoreCase("null")) {}				   
+				else {
+					wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='select2-selection__placeholder']")));
+					WebElement s = driver.findElement(By.xpath("//span[@class='select2-selection__placeholder']"));
+					s.click();
+					WebElement sd = driver.findElement(By.xpath("/html/body/span/span/span[1]/input"));
+					sd.sendKeys("Dietary Suitability");
+					sd.click();
+					driver.findElement(By.xpath("//li[text()='Dietary Suitability']")).click();			
+					WebElement a = driver.findElement(By.cssSelector("#product_attributes > div.product_attributes.wc-metaboxes.ui-sortable > div.woocommerce_attribute.wc-metabox.postbox.taxonomy.pa_dietary-suitability.open > div > table > tbody > tr:nth-child(1) > td:nth-child(2) > span > span.selection > span > ul > li > input"));     
+					a.sendKeys(DietarySuitability);				
+					driver.findElement(By.xpath("//*[@class=\"select2-results__option select2-results__option--highlighted\"]")).click();Thread.sleep(3456);
+					driver.findElement(By.xpath("//*[@id=\"product_attributes\"]/div[2]/div["+Dietarysuitability+"]/div/table/tbody/tr[3]/td/div/label/input")).click();
+					close.click();
+				}} catch (Exception e) {
+					System.out.println("Dietary Suitability");
+					e.printStackTrace();
+				}
+			try {
+				int appearance = 0;
+				if (Appearance.equalsIgnoreCase("null")) {
+				}				   
+				else {
+					wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='select2-selection__placeholder']")));
+					WebElement s = driver.findElement(By.xpath("//span[@class='select2-selection__placeholder']"));
+					s.click();
+					WebElement sd = driver.findElement(By.xpath("/html/body/span/span/span[1]/input"));
+					sd.sendKeys("Appear");
+					sd.click();
+					driver.findElement(By.xpath("//*[@class='select2-results__option select2-results__option--highlighted']")).click();
+					WebElement a = driver.findElement(By.cssSelector("#product_attributes > div.product_attributes.wc-metaboxes.ui-sortable > div.woocommerce_attribute.wc-metabox.postbox.taxonomy.pa_appearance.open > div > table > tbody > tr:nth-child(1) > td:nth-child(2) > span > span.selection > span > ul > li > input"));     
+					a.sendKeys(Appearance);				
+					driver.findElement(By.xpath("//*[@class=\"select2-results__option select2-results__option--highlighted\"]")).click();Thread.sleep(3456);
+					driver.findElement(By.xpath("//*[@id=\"product_attributes\"]/div[2]/div["+appearance+"]/div/table/tbody/tr[3]/td/div/label/input")).click();
+					close.click();
+				}} catch (Exception e) {
+					System.out.println("Appearance");
+					e.printStackTrace();
+				}
+			try {
+				int CountryOfOrigin = 5;
+				if (CountryofOrigin.equalsIgnoreCase("null")) {}				   
+				else {
+
+					wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='select2-selection__placeholder']")));
+					WebElement s = driver.findElement(By.xpath("//span[@class='select2-selection__placeholder']"));
+					s.click();
+					WebElement sd = driver.findElement(By.xpath("/html/body/span/span/span[1]/input"));
+					sd.sendKeys("Country of Origin");
+					sd.click();
+					driver.findElement(By.xpath("//li[text()='Country of Origin']")).click();
+					WebElement a = driver.findElement(By.cssSelector("#product_attributes > div.product_attributes.wc-metaboxes.ui-sortable > div.woocommerce_attribute.wc-metabox.postbox.taxonomy.pa_country-of-manufacture.open > div > table > tbody > tr:nth-child(1) > td:nth-child(2) > span > span.selection > span > ul > li > input"));     
+					a.sendKeys(CountryofOrigin);				
+					driver.findElement(By.xpath("//*[@class=\"select2-results__option select2-results__option--highlighted\"]")).click();Thread.sleep(3456);
+					driver.findElement(By.xpath("//*[@id=\"product_attributes\"]/div[2]/div["+CountryOfOrigin+"]/div/table/tbody/tr[3]/td/div/label/input")).click();
+					close.click();
+				}} catch (Exception e) {
+					System.out.println("Country of Origin");
+					e.printStackTrace();
+				}
+			try {
+				int Shelflife = 6;
+				if (ShelfLife.equalsIgnoreCase("null")) {}				   
+				else {
+					wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='select2-selection__placeholder']")));
+					WebElement s = driver.findElement(By.xpath("//span[@class='select2-selection__placeholder']"));
+					s.click();
+					WebElement sd = driver.findElement(By.xpath("/html/body/span/span/span[1]/input"));
+					sd.sendKeys("Shelf Life");
+					sd.click();
+					driver.findElement(By.xpath("//li[text()='Shelf Life']")).click();
+					WebElement a = driver.findElement(By.cssSelector("#product_attributes > div.product_attributes.wc-metaboxes.ui-sortable > div.woocommerce_attribute.wc-metabox.postbox.taxonomy.pa_shelf-life.open > div > table > tbody > tr:nth-child(1) > td:nth-child(2) > span > span.selection > span > ul > li.select2-search.select2-search--inline > input"));     
+					a.sendKeys(ShelfLife);				
+					driver.findElement(By.xpath("//*[@class=\"select2-results__option select2-results__option--highlighted\"]")).click();Thread.sleep(3456);
+					driver.findElement(By.xpath("//*[@id=\"product_attributes\"]/div[2]/div["+Shelflife+"]/div/table/tbody/tr[3]/td/div/label/input")).click();
+					close.click();
+				}} catch (Exception e) {
+					System.out.println("Shelf Life");
+					e.printStackTrace();
+				}
+			try {
+				int hsn =7 ;
+				if (HSNCode.equalsIgnoreCase("null")) {}				   
+				else {
+					//Thread.sleep(500);
+					wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='select2-selection__placeholder']")));
+					WebElement s = driver.findElement(By.xpath("//span[@class='select2-selection__placeholder']"));
+					s.click();
+					WebElement sd = driver.findElement(By.xpath("/html/body/span/span/span[1]/input"));
+					sd.sendKeys("HSN");
+					sd.click();
+					driver.findElement(By.xpath("//li[text()='HSN Code']")).click();
+					WebElement a = driver.findElement(By.cssSelector("#product_attributes > div.product_attributes.wc-metaboxes.ui-sortable > div.woocommerce_attribute.wc-metabox.postbox.taxonomy.pa_hs-code.open > div > table > tbody > tr:nth-child(1) > td:nth-child(2) > span > span.selection > span > ul > li > input"));         
+					a.sendKeys(HSNCode);
+					driver.findElement(By.xpath("//*[@class=\"select2-results__option select2-results__option--highlighted\"]")).click();Thread.sleep(3456);
+					driver.findElement(By.xpath("//*[@id=\"product_attributes\"]/div[2]/div["+hsn+"]/div/table/tbody/tr[3]/td/div/label/input")).click();
+					close.click();
+				} }catch (Exception e) {
+					System.out.println("HSN Code");
+					e.printStackTrace();
+				}
+			try {
+				int LabelsAndMarks = 8;
+				if (LabelsandMarks.equalsIgnoreCase("null")) {}				   
+				else {
+
+					wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='select2-selection__placeholder']")));
+					WebElement s = driver.findElement(By.xpath("//span[@class='select2-selection__placeholder']"));
+					s.click();
+					WebElement sd = driver.findElement(By.xpath("/html/body/span/span/span[1]/input"));
+					sd.sendKeys("labels");
+					sd.click();
+					driver.findElement(By.xpath("//li[text()='Labels and Marks']")).click();
+					WebElement a = driver.findElement(By.cssSelector("#product_attributes > div.product_attributes.wc-metaboxes.ui-sortable > div.woocommerce_attribute.wc-metabox.postbox.taxonomy.pa_labels-and-marks.open > div > table > tbody > tr:nth-child(1) > td:nth-child(2) > span > span.selection > span > ul > li.select2-search.select2-search--inline > input"));         
+					a.sendKeys(LabelsandMarks);
+					driver.findElement(By.xpath("//*[@class=\"select2-results__option select2-results__option--highlighted\"]")).click();Thread.sleep(3456);
+					driver.findElement(By.xpath("//*[@id=\"product_attributes\"]/div[2]/div["+LabelsAndMarks+"]/div/table/tbody/tr[3]/td/div/label/input")).click();
+					close.click();
+				} }catch (Exception e) {
+					System.out.println("Labels and Marks");
+					e.printStackTrace();
+				}
+			try {
+				int Flavourprofile = 0;
+				if (FlavourProfile.equalsIgnoreCase("null")) {}				   
+				else {
+					//	driver.findElement(By.xpath("//span[text()='Attributes']")).click();
+					//	Thread.sleep(500);
+					wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='select2-selection__placeholder']")));
+					WebElement s = driver.findElement(By.xpath("//span[@class='select2-selection__placeholder']"));
+					s.click();
+					WebElement sd = driver.findElement(By.xpath("/html/body/span/span/span[1]/input"));
+					sd.sendKeys("Flavour Profile");
+					sd.click();
+					driver.findElement(By.xpath("//li[text()='Flavour Profile']")).click();
+					WebElement a = driver.findElement(By.cssSelector("#product_attributes > div.product_attributes.wc-metaboxes.ui-sortable > div.woocommerce_attribute.wc-metabox.postbox.taxonomy.pa_flavour-profile.open > div > table > tbody > tr:nth-child(1) > td:nth-child(2) > span > span.selection > span > ul > li > input"));         
+					a.sendKeys(FlavourProfile);
+					driver.findElement(By.xpath("//*[@class=\"select2-results__option select2-results__option--highlighted\"]")).click();Thread.sleep(3456);
+					driver.findElement(By.xpath("//*[@id=\"product_attributes\"]/div[2]/div["+Flavourprofile+"]/div/table/tbody/tr[3]/td/div/label/input")).click();
+
+				} }catch (Exception e) {
+					System.out.println("Flavour Profile");
+					e.printStackTrace();
+				}
+			try {
+				int technology = 9;
+				if (Technology.equalsIgnoreCase("null")) {}				   
+				else {
+					//	Thread.sleep(500);
+					JavascriptExecutor executor1 = (JavascriptExecutor) driver;			
+					executor1.executeScript("arguments[0].scrollIntoView();", elem);
+					close.click();
+					wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='select2-selection__placeholder']")));
+					WebElement s = driver.findElement(By.xpath("//span[@class='select2-selection__placeholder']"));
+					s.click();
+					WebElement sd = driver.findElement(By.xpath("/html/body/span/span/span[1]/input"));
+					sd.sendKeys("Technology");
+					sd.click();
+					driver.findElement(By.xpath("//li[text()='Technology']")).click();
+					WebElement a = driver.findElement(By.cssSelector("#product_attributes > div.product_attributes.wc-metaboxes.ui-sortable > div.woocommerce_attribute.wc-metabox.postbox.taxonomy.pa_technology.open > div > table > tbody > tr:nth-child(1) > td:nth-child(2) > span > span.selection > span > ul > li.select2-search.select2-search--inline > input"));         
+					a.sendKeys(Technology);
+					driver.findElement(By.xpath("//*[@class=\"select2-results__option select2-results__option--highlighted\"]")).click();Thread.sleep(3456);
+					driver.findElement(By.xpath("//*[@id=\"product_attributes\"]/div[2]/div["+technology+"]/div/table/tbody/tr[3]/td/div/label/input")).click();
+
+				}} catch (Exception e) {
+					System.out.println("Technology");
+					e.printStackTrace();
+				}
+			try {
+				int Storageconditions = 10;
+				if (StorageConditions.equalsIgnoreCase("null")) {}				   
+				else {
+					JavascriptExecutor executor1 = (JavascriptExecutor) driver;			
+					executor1.executeScript("arguments[0].scrollIntoView();", elem);
+					close.click();
+					wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='select2-selection__placeholder']")));
+					WebElement s = driver.findElement(By.xpath("//span[@class='select2-selection__placeholder']"));
+					s.click();
+					WebElement sd = driver.findElement(By.xpath("/html/body/span/span/span[1]/input"));
+					sd.sendKeys("Storage Conditions");
+					sd.click();
+					driver.findElement(By.xpath("//li[text()='Storage Conditions']")).click();
+					WebElement a = driver.findElement(By.cssSelector("#product_attributes > div.product_attributes.wc-metaboxes.ui-sortable > div.woocommerce_attribute.wc-metabox.postbox.taxonomy.pa_storage-conditions.open > div > table > tbody > tr:nth-child(1) > td:nth-child(2) > span > span.selection > span > ul > li.select2-search.select2-search--inline > input"));         
+					a.sendKeys(StorageConditions);
+					driver.findElement(By.xpath("//*[@class=\"select2-results__option select2-results__option--highlighted\"]")).click();Thread.sleep(3456);
+					driver.findElement(By.xpath("//*[@id=\"product_attributes\"]/div[2]/div["+Storageconditions+"]/div/table/tbody/tr[3]/td/div/label/input")).click();
+
+				}} catch (Exception e) {
+					System.out.println("Storage Conditions");
+					e.printStackTrace();
+				}
+			try {
+				int Flavourtype = 0;
+				if (FlavourType.equalsIgnoreCase("null")) {}				   
+				else {
+					JavascriptExecutor executor1 = (JavascriptExecutor) driver;			
+					executor1.executeScript("arguments[0].scrollIntoView();", elem);
+					close.click();
+					wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='select2-selection__placeholder']")));
+					WebElement s = driver.findElement(By.xpath("//span[@class='select2-selection__placeholder']"));
+					s.click();
+					WebElement sd = driver.findElement(By.xpath("/html/body/span/span/span[1]/input"));
+					sd.sendKeys("Flavour Type");
+					sd.click();
+					driver.findElement(By.xpath("//li[text()='Flavour Type']")).click();
+					WebElement a = driver.findElement(By.cssSelector("#product_attributes > div.product_attributes.wc-metaboxes.ui-sortable > div.woocommerce_attribute.wc-metabox.postbox.taxonomy.pa_flavour-type.open > div > table > tbody > tr:nth-child(1) > td:nth-child(2) > span > span.selection > span > ul > li > input"));         
+					a.sendKeys(FlavourType);
+					driver.findElement(By.xpath("//*[@class=\"select2-results__option select2-results__option--highlighted\"]")).click();
+					driver.findElement(By.xpath("//*[@id=\"product_attributes\"]/div[2]/div[13]/div/table/tbody/tr[3]/td/div/label/input")).click();
+					WebElement element = driver.findElement(By.xpath("//*[@id='product_attributes']/div[3]/button"));
+					element.click();Thread.sleep(3456);
+					driver.findElement(By.xpath("//*[@id=\"product_attributes\"]/div[2]/div["+Flavourtype+"]/h3/div[1]")).click();
+					Thread.sleep(2234);
+				}} catch (Exception e) {
+					System.out.println("Flavour Type");
+					e.printStackTrace();
+				}
+			try {
+				WebElement ld = driver.findElement(By.xpath("//*[@id='content']"));	
+				JavascriptExecutor executor2 = (JavascriptExecutor) driver;			
+				executor2.executeScript("arguments[0].scrollIntoView();", ld);
+				ld.clear();
+				ld.sendKeys(longdiscription);
+			} catch (Exception e) {
+				System.err.println("long Discription");
+				e.printStackTrace();
+			}
+			try {	
+				WebElement body = driver.findElement(By.tagName("body"));
+				body.sendKeys(Keys.END);
+				WebElement sd = driver.findElement(By.xpath("//*[@id='excerpt']"));		
+				sd.clear();
+				sd.sendKeys(shortdiscription);
+			} catch (Exception e) {
+				System.err.println("short Discription");
+				e.printStackTrace();
+			}	
+			try{			
+				driver.findElement(By.xpath("//*[@id=\"wcpv-product-vendor-terms-select\"]")).sendKeys(vendor);	
+			} catch (Exception e) {
+				System.err.println("vendor");
+				e.printStackTrace();
+			} 
+			try {
+				Thread.sleep(2345);
+				wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='Variations']")));
+				WebElement attt = driver.findElement(By.xpath("//span[text()='Variations']"));
+				attt.click();
+				Thread.sleep(1000);
+				wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='variable_product_options_inner']/div[3]/button[2]")));
+				Thread.sleep(1000);
+				WebElement addManually = driver.findElement(By.xpath("//*[@id='variable_product_options_inner']/div[3]/button[2]"));					
+				String[] wordsArray = Packaging.split(",");
+				String[] ReggularPric = ReggularPrice.split(",");
+				String[] SalePric= SalePrice.split(",");
+				String[] Commissio = Commission.split(",");
+				String[] Weight = weight.split(",");
+
+				String one = wordsArray[2];
+				int y =0;
+				for (String String_word : wordsArray) {					
+					for (int j = 1; j <2; j++) {
+						wait.until(ExpectedConditions.elementToBeClickable(addManually));
+						Thread.sleep(1000);
+						addManually.click();	                                      
+						Thread.sleep(3000);
+						//	wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"variable_product_options_inner\"]/div[4]/div[2]/h3/select")));				
+						WebElement Sel = driver.findElement(By.xpath("//*[@id='variable_product_options_inner']/div[5]/div[1]/h3/select"));
+						Thread.sleep(1567);
+						Select Select = new Select(Sel);	
+						Select.selectByVisibleText(String_word);
+						Thread.sleep(2000);
+						//		String di = driver.findElement(By.xpath("/html/body/div[2]/div[2]/div[3]/div[1]/div[6]/form/div/div/div[1]/div[3]/div/div[2]/div/div[7]/div/div[4]/div/h3/strong")).getText();
+						driver.findElement(By.xpath("//*[@id='variable_product_options_inner']/div[5]/div[1]/h3/strong")).click();
+						driver.findElement(By.xpath("//*[@id='variable_regular_price_"+y+"']")).sendKeys(ReggularPric[y]); 
+						driver.findElement(By.xpath("//*[@id='variable_weight"+y+"']")).sendKeys(Weight[y]); 
+						driver.findElement(By.xpath("//*[@id='variable_wcj_msrp_"+y+"']")).sendKeys(SalePric[y]);
+						WebElement comission = driver.findElement(By.xpath("//*[@id=\"variable_product_options_inner\"]/div[5]/div/div/div/div[8]/p/input"));
+						comission.sendKeys(Commissio[y]);
+						driver.findElement(By.xpath("//button[text()='Save changes']")).click();		
+						JavascriptExecutor executor1 = (JavascriptExecutor) driver;			
+						executor1.executeScript("arguments[0].scrollIntoView();", elem);     
+						Thread.sleep(2500);
+					}	y++;			        	
+				}wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='variable_product_options_inner']/div[1]/div[1]/select")));
+				WebElement cel = driver.findElement(By.xpath("//*[@id='variable_product_options_inner']/div[1]/div[1]/select"));
+				Select cele = new Select(cel);
+				cele.selectByVisibleText(one);
+			} catch (Exception e) {
+				System.out.println("Variations");
+				e.printStackTrace();
+			}  WebElement savedraft = driver.findElement(By.xpath("//*[@id='save-post']"));
+			WebElement body = driver.findElement(By.tagName("body"));
+			try { 	 
+				savedraft.click();	
+				Thread.sleep(3456);
+				WebElement attttt = driver.findElement(By.xpath("//span[text()='Variations']"));
+				wait.until(ExpectedConditions.elementToBeClickable(attttt));
+				attttt.click();
+				Thread.sleep(3456);
+				java.util.List<WebElement> skus = driver.findElements(By.xpath("//*[@id='variable_product_options_inner']/div/div/h3/strong"));
+				String[] textArray = new String[skus.size()];         
+				body.sendKeys(Keys.END);
+				for (int t = 0; t < skus.size(); t++) {
+					textArray[t] = skus.get(t).getText();	                  
+					textArray[t] = textArray[t].replace("#", "");				
+					//	while (attempts < maxAttempts) {
+					driver.findElement(By.xpath("//*[@id='wcj_order_quantities_min_"+textArray[t]+"']")).sendKeys("1");
+					driver.findElement(By.xpath("//*[@id='wcj_order_quantities_max_"+textArray[t]+"']")).sendKeys("10000");
+					Thread.sleep(2345);
+				}
+				driver.findElement(By.xpath("//*[@id='wcj_order_quantities_step_"+id+"']")).sendKeys("1");
+				wait.until(ExpectedConditions.elementToBeClickable(savedraft));
+				body.sendKeys(Keys.HOME); 
+				wait.until(ExpectedConditions.elementToBeClickable(savedraft));
+				savedraft.click();	
+			} catch (Exception e) {
+				System.out.println("Min And Max");
+				e.printStackTrace();
+			}  	
+			System.out.println(id+" IS Completed");
+			FileInputStream fis = new FileInputStream("C:\\Users\\sures\\OneDrive\\Desktop\\OLD.xlsx");
+			XSSFWorkbook rrbook = new XSSFWorkbook(fis);
+			XSSFSheet sheett = rrbook.getSheet("ID");
+			Row roww = sheett.createRow(i);
+			org.apache.poi.ss.usermodel.Cell cel1 = roww.createCell(1, CellType.STRING);
+			org.apache.poi.ss.usermodel.Cell cel2 = roww.createCell(2, CellType.STRING);
+			cel1.setCellValue(Name);
+			cel2.setCellValue(id);
+			FileOutputStream fileOut = new FileOutputStream("C:\\Users\\sures\\OneDrive\\Desktop\\OLD.xlsx");
+			rrbook.write(fileOut);
+			fis.close();
+			fileOut.close();
+			rrbook.close();
+		}
+	}
+}
